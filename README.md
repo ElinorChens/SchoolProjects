@@ -18,8 +18,8 @@
 ## 3. 鐵達尼號沈船事件乘客與船員生還資料
 ### [專案概要]
 ### [程式碼]
-檔案名稱 : Titanic.R
-檔案連結 : https://github.com/ElinorChens/SchoolProjects/blob/e585f90c54605963394c84dd4c142885f9ef22f4/Titanic.R
+- 檔案名稱 : Titanic.R
+- 檔案連結 : https://github.com/ElinorChens/SchoolProjects/blob/e585f90c54605963394c84dd4c142885f9ef22f4/Titanic.R
 
 ## 4. 
 ### [專案概要]
