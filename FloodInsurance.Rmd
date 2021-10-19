@@ -1,0 +1,404 @@
+---
+title: "Cat_flood_report"
+author: "EC"
+date: "2020/2/22"
+output: 
+  html_document:
+    theme : sandstone
+    fig_width: 10
+    fig_height: 7.5
+    toc: true
+    toc_depth: 4
+    toc_float: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# 類別資料分析期末報告
+題目 : 探討影響易淹水地區民眾購買防颱洪水險意願的因素
+
+## 資料前處理
+
+### 載入需要的套件
+
+```{r include=FALSE}
+library(tidyverse)
+library(DescTools)
+library(vcd)
+library(InformationValue)
+library(ROCR)
+library(plotROC)
+#library(perturb)
+library(funModeling)
+```
+
+
+### 載入資料
+```{r}
+data <- read.csv("C:/Rproject/FINISHED/Cat_flood project/data.csv", header = TRUE
+                 , sep = ",")
+```
+
+
+
+### 擷取出需要的變數
+
+```{r}
+data11 <- mutate(data, id=data$嚜磨d) 
+
+data12 <- select(data11, a, v15, v16.2
+                 ,v16.5, v16.6, v29
+                 ,v42, v59, id)  
+
+# [法二]
+# data12 <- mutate(data, id=data$嚜磨d) %>%
+#            select(a, v15, v16.2,v16.5, v16.6, v29
+#                 ,v42, v59, id)
+```
+
+## 建立willing變數 : 最低保費價格下購買意願
+```{r}
+data13 <- filter(data12, v16.2 == 1)
+data13.1 <- mutate(data13, willing = v16.2)
+
+data14 <- filter(data12, v16.2 != 1)
+data14.1 <- filter(data14, v16.6 == 1)
+data14.2 <- mutate(data14.1, willing = 1)
+data14.3 <- filter(data14, v16.6 != 1)
+data14.4 <- mutate(data14.3, willing =0)
+
+data14.5 <- rbind(data14.2, data14.4)
+
+data15 <- rbind(data13.1, data14.5)
+
+data16 <- select(data15, willing, a, v15, v16.5, v29, v42, v59, id)
+
+# [法二]
+# data15 <- data12
+# data15$willing <- ifelse(data15$v16.2 == 1 | data15$v16.6 == 1, 1, 0)
+# data16 <- select(data15, willing, a, v15, v16.5, v29, v42, v59, id)
+
+```
+
+
+### 重新命名欄位名稱
+
+```{r}
+data17 <- rename(data16, reg=a,
+                 fac=v15,
+                 price=v16.5,
+                 loss=v29,
+                 edu=v42,
+                 inc=v59)
+
+```
+
+### 處理遺漏值
+
+```{r}
+# 刪去fac, loss, edu 遺漏值
+data18 <- filter(data17, fac != 9)
+data18.1 <- filter(data18, loss != 8)
+data18.2 <- filter(data18.1, edu != 8)
+## [法二] filter 可以一次設多個條件
+## data18.2 <- filter(data17, fac !=9,
+##                     loss !=8, edu !=8)
+
+# 把inc遺漏值用眾數3填入
+data18.3 <- filter(data18.2, inc !=98)
+data18.4 <- filter(data18.2, inc == 98)
+data18.5 <- mutate(data18.4, inc2 = 3)
+data18.6 <- mutate(data18.5, inc=NULL)
+data18.7 <- rename(data18.6, inc = inc2)
+data19 <- rbind(data18.3, data18.7)
+## [法二] 
+## data19.0 <- data18.2
+## data19.0$inc <- ifelse(data19.0$inc == 98, 3, data19.0$inc)
+## 確認資料有無一樣
+## table(arrange(data19,id) == arrange(data19.0,id)) 
+
+# 把fac的代號從(1,2)改成(1,0)
+data19.1 <- filter(data19, fac == 1)
+data19.2 <- filter(data19, fac !=1)
+data19.3 <- mutate(data19.2, fac2=0)
+data19.4 <- mutate(data19.3, fac = NULL)
+data19.5 <- rename(data19.4, fac=fac2)
+data20 <- rbind(data19.1, data19.5)
+
+## [法二]
+## data19.5 <- data19
+## data19.5$fac <- ifelse(data19.5$fac == 1, 1, 0)
+## 確認資料有無一樣
+## table(arrange(data20,id) == arrange(data19.5,id))
+```
+
+### 修改資料型別
+```{r}
+data20$willing <- as.factor(data20$willing)
+data20$reg <- as.factor(data20$reg)
+data20$fac <- as.factor(data20$fac)
+data20$loss <- as.factor(data20$loss)
+data20$edu <- as.factor(data20$edu)
+data20$inc <- as.factor(data20$inc)
+data20$id <- as.character(data20$id)
+str(data20)
+
+```
+
+# EDA
+## [法二]:plot_num from funModeling package
+注意 : 資料形態要是數值型才能畫
+
+```{r}
+data20.1 <- select(data20, -id)
+data20.1$willing <- as.factor(data20.1$willing)
+data20.1$reg <- as.integer(data20.1$reg)
+data20.1$fac <- as.integer(data20.1$fac)
+data20.1$loss <- as.integer(data20.1$loss)
+data20.1$edu <- as.integer(data20.1$edu)
+data20.1$inc <- as.integer(data20.1$inc)
+
+
+plot_num(data20.1)
+```
+
+```{r}
+cross_plot(data20, input = c("price","loss", "fac", "reg", "edu","inc"), 
+           target = "willing")
+
+
+tab1 <- table(data20$inc, data20$willing)
+prop.table(tab1)  ## 總和百分比
+prop.table(tab1, margin = 1)  ## 列總和百分比
+prop.table(tab1, margin = 2)  ## 欄總和百分比
+
+```
+
+
+## 1. willing
+```{r}
+ggplot(data=data20)+geom_bar(aes(x=willing))
+table(data20$willing)
+```
+
+## 2. reg
+
+```{r}
+ggplot(data=data20)+geom_bar(aes(x=reg))
+table(data20$reg)
+```
+
+## 3.fac
+
+```{r}
+ggplot(data=data20)+geom_bar(aes(x=fac))
+table(data20$fac)
+```
+
+## 4.price
+```{r}
+ggplot(data=data20)+geom_bar(aes(x=price))
+table(data20$price)
+```
+
+## 5.loss
+```{r}
+ggplot(data=data20)+geom_bar(aes(x=loss))
+table(data20$loss)
+```
+
+## 6.edu
+```{r}
+ggplot(data=data20)+geom_bar(aes(x=edu))
+table(data20$edu)
+```
+
+# model free method
+
+## 獨立性/同質性檢定
+```{r}
+table_edu <- table(data20$willing, data20$edu)
+assocstats(table_edu)
+
+table_price <- table(data20$willing, data20$price)
+assocstats(table_price)
+
+## 三維檢定同質性和獨立性
+### 獨立性 : H0 : partial OR都等於1
+table_pe <- table(data20$willing, data20$price, data20$edu)
+mantelhaen.test(table_pe)
+#### 結論 : 拒絕H0，表示不同edu下，price對willing的影響是不全相同的，三個變數之間不是獨立的
+
+### 同質性 : H0 : partial OR都相等
+table_fp <- table(data20$willing, data20$fac, data20$price)
+BreslowDayTest(table_fp)
+#### 結論 : 不拒H0，表示無足夠證據證明不同price下，fac對willing的OR有不同，也就是說不管price為多少，fac對willing的影響是相同的
+```
+
+# 建模
+```{r}
+## m1 : HWF model
+
+m1 <- glm(willing ~ price+reg+fac+loss+edu+inc
+          +price:reg+price:fac+price:loss
+          +price:edu+price:inc, data = data20,
+          family = binomial(link = "logit"))
+summary(m1)
+anova(m1, test = "LRT")
+```
+
+- m1 結論 : 交互作用項不顯著，故刪去
+
+```{r}
+## m2 : 刪去交互作用項
+m2 <- glm(willing ~ price+reg+fac+loss+edu+inc
+         , data = data20, family = binomial(link = "logit"))
+
+summary(m2)
+anova(m2, test = "LRT")
+yhat_m2 <- fitted(m2)
+yhat_m2 <- as.numeric(yhat_m2)
+yi <- data20[,1]
+yi <- as.numeric(yi)
+str(yi)
+HosmerLemeshowTest(fit = yhat_m2, obs = yi)
+```
+
+- m2 結論 : reg 不顯著，刪去;fac 雖也不顯著，但認為有替代效應故留在模型中
+
+```{r}
+m3 <- glm(willing ~ price+fac+loss+edu+inc
+          , data = data20, family = binomial(link = "logit"))
+summary(m3)
+
+anova(m3, test = "LRT")
+
+yhat_m3 <- fitted(m3)
+yhat_m3 <- as.numeric(yhat_m3)
+
+HosmerLemeshowTest(fit = yhat_m3, obs = yi)
+```
+
+- m3 結論 : 通過GOF檢定，已包含研究者所認為重要的變數於模型中了，作為 final model
+
+
+## m3 更多討論
+```{r}
+
+### 計算模型deviance 
+deviance(m3)
+### 計算係數CI-wald type
+confint.default(m3, level = 0.95)
+
+### 標準殘差
+rstandard(m3)
+
+```
+
+# 從預測準度來討論模型表現
+
+## Confusion matrix
+
+```{r}
+predict.prob <- predict(m3, data20, type = "response")
+opt.cutoff <- optimalCutoff(data20$willing, predict.prob)
+confusionMatrix(data20$willing, predict.prob, threshold = opt.cutoff)
+```
+
+## 各項指標
+```{r}
+misClassError(data20$willing, predict.prob, threshold = opt.cutoff)
+precision(data20$willing, predict.prob, threshold = opt.cutoff)
+sensitivity(data20$willing, predict.prob, threshold = opt.cutoff)
+specificity(data20$willing, predict.prob, threshold = opt.cutoff)
+```
+
+## ROC, AUC
+```{r}
+## ROCR package
+
+pred <- prediction(fitted(m3), yi)
+perf <- performance(pred, "tpr", "fpr")
+
+### ROC 
+plot(perf)
+
+performance(pred, "auc")
+```
+
+```{r}
+## plotROC package
+predict.prob2 <- predict(m3, data20, type = "response")
+predict.table <- data.frame(true_label = data20$willing,
+                            predict_prob = predict.prob2)
+basic.plot <- ggplot(predict.table, aes(d = true_label, m = predict.prob2))+
+  geom_roc(n.cuts = 3, labelsize = 3, labelround = 2)
+
+basic.plot + style_roc() + 
+  annotate("text", x = .75, y = .25, size = 5,
+           label = paste("AUC =", round(calc_auc(basic.plot)$AUC, 3)))
+
+## predict.prob3 <- predict(m3, data20, type = "term") 
+## 跟 predict.prob2 <- fitted(m3) 相同
+```
+
+
+## 檢查共線性 
+
+### 法一 : VDP, CNI
+x的資料型態要先改成數值型才能計算，若有多餘三level的自變數，要先把資料表展開成有dummy variables的型態才能計算
+
+```{r}
+data20.1 <- select(data20, -id)
+data20.1$willing <- as.factor(data20.1$willing)
+data20.1$reg <- as.integer(data20.1$reg)
+data20.1$fac <- as.integer(data20.1$fac)
+data20.1$loss <- as.integer(data20.1$loss)
+data20.1$edu <- as.integer(data20.1$edu)
+data20.1$inc <- as.integer(data20.1$inc)
+
+# 
+m3.1 <- glm(willing ~ price+fac+loss+edu+inc
+          , data = data20.1, family = binomial(link = "logit"))
+
+summary(m3.1)
+#colldiag(m3.1)
+
+
+# 若包含price 和price 二次項，會發現有嚴重的共線性
+m4 <- glm(willing ~ reg+fac+price+loss+edu+inc+price:edu+I(price^2),
+          data = data20.1, family = binomial(link = "logit"))
+
+#colldiag(m4)
+
+```
+
+
+```{r}
+data20.2 <- data20.1
+
+data20.2$price <- as.integer(data20.2$price)
+data20.2$loss <- factor(data20.2$loss, ordered = TRUE)
+data20.2$edu <- factor(data20.2$edu, ordered = TRUE)
+data20.2$inc <- factor(data20.2$inc, ordered = TRUE)
+data20.2$reg <- factor(data20.2$reg)
+data20.2$fac <- factor(data20.2$fac)
+
+m3.31 <- glm(willing ~ price+fac+loss+edu+inc, data = data20.2,
+             family = binomial(link = "logit"))
+summary(m3.31)
+anova(m3.31, test = "LRT")
+
+```
+
+### 法二 : VIF檢查共線性
+```{r}
+library(car)
+#　from car package
+
+## 不用改資料型態，VIF>10 嚴重共線性
+vif(m3)
+```
+
