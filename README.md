@@ -72,6 +72,8 @@
 **[使用方法]**   
 - 程式 : R, SAS
 - 使用方法 : 探索性資料分析、Logistic Regression   
+   
+
 **[程式碼]**   
 - 檔案名稱 : FloodInsurance.Rmd
 - 檔案連結 : https://github.com/ElinorChens/SchoolProjects/blob/master/FloodInsurance.Rmd
