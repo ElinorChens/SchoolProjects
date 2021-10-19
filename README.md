@@ -28,7 +28,7 @@
 ### [專案概要]
 ### [程式碼]
 - 檔案名稱 : Titanic.R
-- 檔案連結 : https://github.com/ElinorChens/SchoolProjects/blob/e585f90c54605963394c84dd4c142885f9ef22f4/Titanic.R
+- 檔案連結 :
 
 ## 4. 
 ### [專案概要]
