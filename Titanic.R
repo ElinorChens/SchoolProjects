@@ -87,8 +87,9 @@ hist(sub3$fare)
 summary(sub1$fare)
 summary(sub2$fare)
 summary(sub3$fare)
-summary(df)
+
 df <- rbind(sub1, sub2, sub3)
+summary(df)
 plotar(df, input = "lnfare", target = "class", plot_type = "boxplot")
 
 ## model-------------
@@ -183,7 +184,7 @@ y <- as.numeric(traindata$survived) -1
 yhat <- fitted(m_step)
 anova(m_step, test = "LRT")
 
-# 同fitted
+# HosmerLemeshow Test
 pred <- predict(mL2, traindata, type = "response")
 HosmerLemeshowTest(yhat, y)
 
@@ -203,8 +204,6 @@ table(testdata$survived)
 plotROC(testdata$survived, predict.prob)
 
 y <- as.numeric(testdata$survived)-1
-class(y)
-head(y)
 
 AUROC(y, predict.prob)
 
