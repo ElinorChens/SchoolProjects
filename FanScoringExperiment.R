@@ -18,7 +18,7 @@ data$Material <- as.factor(data$Material)
 
 # 交互作用圖-------
 # interaction plot
-## 檢視結論
+## 交互作用圖結論
 # 1. Position 跟 Material 可能有交互作用
 # 2. Position 跟 Power 可能有交互作用
 
