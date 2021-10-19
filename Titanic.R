@@ -207,6 +207,8 @@ y <- as.numeric(testdata$survived)-1
 
 AUROC(y, predict.prob)
 
+
+
 ## random forest---------
 library(randomForest)
 traindata$survived <- as.factor(traindata$survived)
