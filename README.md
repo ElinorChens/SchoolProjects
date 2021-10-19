@@ -23,7 +23,7 @@
 
 **[使用方法]**   
 - 程式 : R
-- 分析方法 : 探索性分析、PCA主成份分析、Correspondence Analysis、K-means、Random Forest、XGBoost
+- 分析方法 : 探索性分析、PCA主成份分析、Correspondence Analysis、Factor Analysis、K-means、Random Forest、XGBoost
 
 **[程式碼]**   
 - 檔案名稱 : AirbnbTpe.Rmd
@@ -47,7 +47,7 @@
    
 **[使用方法]**   
 - 程式 : R
-- 使用方法 : 探索性資料分析、Linear Regression、Random Forest   
+- 使用方法 : 探索性資料分析、Logistic Regression、Random Forest   
    
 **[程式碼]**   
 - 檔案名稱 : Titanic.R
