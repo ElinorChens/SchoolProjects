@@ -26,9 +26,9 @@
 - 分析方法 : 探索性分析、PCA主成份分析、Correspondence Analysis、K-means、Random Forest、XGBoost
 
 **[程式碼]**   
-- 檔案名稱 : AirbnbTpe.R
-- 檔案連結 : 
-- 
+- 檔案名稱 : AirbnbTpe.Rmd
+- 檔案連結 : https://github.com/ElinorChens/SchoolProjects/blob/master/AirbnbTpe.Rmd
+
 ## 2. 解密都市傳說 : 教授以風扇吹散報告遠近決定學生成績之實驗與影響成績之因素探討
 **[專案概要]**   
   實際進行實驗，模擬教授以風扇吹散報告之情況。以風扇風速、紙張厚度、繳交順序為主要因子，並控制其他變數相同下，收集12種條件組合的實驗數據，分析結果發現唯有紙張厚度對於飛散距離具有顯著影響，使用紙張厚度高者，飛散距離顯著較使用厚度低者近，表示在本實驗情境下，使用紙張厚度高者較可能獲得較高成績。   
@@ -36,30 +36,40 @@
 - 程式 : R
 - 使用方法 : 三因子實驗設計、ANOVA 分析   
 **[程式碼]**   
-- 檔案名稱 : .R
-- 檔案連結 :
+- 檔案名稱 : FanScoringExperiment.R
+- 檔案連結 : https://github.com/ElinorChens/SchoolProjects/blob/master/FanScoringExperiment.R
 
 ## 3. 鐵達尼號沈船事件乘客與船員生還資料
-### [專案概要]
-### [程式碼]
+**[專案概要]**   
+使用鐵達尼號乘客與船員的資料，分析可能影響生還的因素與建立預測模型。
+   
+**[使用方法]**   
+- 程式 : R
+- 使用方法 : 探索性資料分析、Linear Regression、Random Forest   
+   
+**[程式碼]**   
 - 檔案名稱 : Titanic.R
-- 檔案連結 :
+- 檔案連結 : https://github.com/ElinorChens/SchoolProjects/blob/master/Titanic.R
 
 ## 4. 某零售商店顧客終身價值(CLV)之影響因素探討與預測模型建立   
-### [專案概要]
-### [使用方法]
-- 程式 : 
-- 使用方法 : 
+**[專案概要]**   
+利用 kaggle 網站上一組某實體零售商之交易資料，以顧客終身價值(Customer Lifetime Value, CLV) 做為預測應變數進行分析，探討影響因素與建立CLV預測模型。   
+   
+**[使用方法]**   
+- 程式 : R
+- 使用方法 : 探索性資料分析、Linear Regression、Random Forest
+
 **[程式碼]**   
-- 檔案名稱 : .R
-- 檔案連結 :
+- 檔案名稱 : RetailCLVModel.R
+- 檔案連結 : https://github.com/ElinorChens/SchoolProjects/blob/master/RetailCLVModel.R
 
 ## 5. 台南市民眾投保颱風洪水險意願與影響變數探討   
 **[專案概要]**   
 資料取自學術調查研究資料庫(SRDA)其中研究計劃所收集之問卷資料，使用其中民眾針對颱風洪水險意願有關的變數資料進行分析，透過建立邏輯斯迴歸模型了解影響民眾投保颱風洪水險意願之原因，分析結果發現保費價格、財產損失認知嚴重程度、教育程度與投保意願具有顯著影響，而是否有防洪設施與收入則不顯著。   
    
 **[使用方法]**   
-
+- 程式 : R, SAS
+- 使用方法 : 探索性資料分析、Logistic Regression
 **[程式碼]**   
-- 檔案名稱 : .R
-- 檔案連結 :
+- 檔案名稱 : FloodInsurance.Rmd
+- 檔案連結 : https://github.com/ElinorChens/SchoolProjects/blob/master/FloodInsurance.Rmd
