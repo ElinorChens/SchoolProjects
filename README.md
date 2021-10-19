@@ -32,9 +32,11 @@
 ## 2. 解密都市傳說 : 教授以風扇吹散報告遠近決定學生成績之實驗與影響成績之因素探討
 **[專案概要]**   
   實際進行實驗，模擬教授以風扇吹散報告之情況。以風扇風速、紙張厚度、繳交順序為主要因子，並控制其他變數相同下，收集12種條件組合的實驗數據，分析結果發現唯有紙張厚度對於飛散距離具有顯著影響，使用紙張厚度高者，飛散距離顯著較使用厚度低者近，表示在本實驗情境下，使用紙張厚度高者較可能獲得較高成績。   
+   
 **[使用方法]**   
 - 程式 : R
 - 使用方法 : 三因子實驗設計、ANOVA 分析   
+   
 **[程式碼]**   
 - 檔案名稱 : FanScoringExperiment.R
 - 檔案連結 : https://github.com/ElinorChens/SchoolProjects/blob/master/FanScoringExperiment.R
@@ -69,7 +71,7 @@
    
 **[使用方法]**   
 - 程式 : R, SAS
-- 使用方法 : 探索性資料分析、Logistic Regression
+- 使用方法 : 探索性資料分析、Logistic Regression   
 **[程式碼]**   
 - 檔案名稱 : FloodInsurance.Rmd
 - 檔案連結 : https://github.com/ElinorChens/SchoolProjects/blob/master/FloodInsurance.Rmd
