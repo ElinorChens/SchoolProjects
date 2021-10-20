@@ -41,7 +41,7 @@
 - 檔案名稱 : FanScoringExperiment.R
 - 檔案連結 : https://github.com/ElinorChens/SchoolProjects/blob/master/FanScoringExperiment.R
 
-## 3. 鐵達尼號沈船事件乘客與船員生還資料
+## 3. 鐵達尼號沈船事件乘客與船員生還資料分析
 **[專案概要]**   
 使用鐵達尼號乘客與船員資料，分析可能影響生還的因素與建立預測模型。
    
