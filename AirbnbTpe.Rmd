@@ -1,5 +1,5 @@
 ---
-title: "多變量分析期末報告(airbib)EDA和非監督式學習模型程式碼"
+title: "多變量分析期末報告(airbb)EDA和非監督式學習模型程式碼"
 author: "Elinor Chen"
 date: "2020/8/22"
 output: 
